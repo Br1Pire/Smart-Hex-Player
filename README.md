@@ -69,10 +69,4 @@ Genera una matriz centrada en el tablero, donde las celdas cercanas al centro ti
 
 ---
 
-## Consideraciones Finales
 
-- El jugador usa una profundidad fija de 3 en el algoritmo Minimax.
-- La estrategia se adapta a cada etapa del juego para lograr un balance entre posicionamiento, conectividad y control del tablero.
-- La implementación busca eficiencia sin sacrificar calidad en las decisiones.
-
----
