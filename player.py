@@ -64,4 +64,35 @@ class SmartPlayer(Player):
         
     def evaluate_board(self, board):
         
-        return random.randint(1, 100)
+        n = board.size  
+        turns_amount = len(board.player_positions[1]) + len(board.player_positions[2])
+        min_turns_to_win = 2 * n - 3
+        percent_turns = n * n * 0.60
+
+        if turns_amount < min_turns_to_win:
+            return self.evaluate_early_game(board)
+        elif turns_amount < percent_turns:
+            return self.evaluate_mid_game(board)
+        else:
+            return self.evaluate_end_game(board)
+        
+    def evaluate_early_game(self, board):
+        weights = self.generate_weight_matrix(board.size)
+
+        check_list = board.player_positions[2]
+
+        for pos in check_list:
+            for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, 1), (1, -1)]:
+                x, y = pos[0] + dx, pos[1] + dy
+                if 0 <= x < board.size and 0 <= y < board.size:
+                    weights[x][y] += 1
+                    
+        score = 0
+        for i in range(board.size):
+            for j in range(board.size):
+                if board[i][j] == self.player_id:
+                    score += weights[i][j]
+        return score
+    
+    def generate_weight_matrix(self, n):
+        return [[n - abs(i - n//2) - abs(j - n//2) for j in range(n)] for i in range(n)]
