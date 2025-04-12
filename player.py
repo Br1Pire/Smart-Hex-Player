@@ -1,5 +1,5 @@
 import random
-import HexBoard
+from HexBoard import HexBoard
 import heapq
 
 class Player:
@@ -30,7 +30,7 @@ class SmartPlayer(Player):
 
             if score > best_score:
                 best_score = score
-                best_move = move
+                best_move = [move]
             elif score == best_score:
                 best_move.append(move)
 
@@ -94,9 +94,9 @@ class SmartPlayer(Player):
         score = 0
         for i in range(board.size):
             for j in range(board.size):
-                if board[i][j] == self.player_id:
+                if board.board[i][j] == self.player_id:
                     score += weights[i][j]
-                elif board[i][j] == 2:
+                elif board.board[i][j] == 2:
                     score -= weights[i][j]
         return score
     
@@ -118,7 +118,7 @@ class SmartPlayer(Player):
         heap = []
 
         for x, y in start_edges:
-            if board[x][y] in (0, player_id):
+            if board.board[x][y] in (0, player_id):
                 heapq.heappush(heap, (0, x, y)) 
 
         while heap:
@@ -133,9 +133,9 @@ class SmartPlayer(Player):
             for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, 1), (1, -1)]:
                 nx, ny = x + dx, y + dy
                 if 0 <= nx < n and 0 <= ny < n and (nx, ny) not in visited:
-                    if board[nx][ny] == player_id:
+                    if board.board[nx][ny] == player_id:
                         heapq.heappush(heap, (cost, nx, ny))  
-                    elif board[nx][ny] == 0:
+                    elif board.board[nx][ny] == 0:
                         heapq.heappush(heap, (cost + 1, nx, ny))  
 
         return float("inf")  
